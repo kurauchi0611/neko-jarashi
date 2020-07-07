@@ -10,3 +10,5 @@ deploy:
 	npm run deploy
 logs:
 	npm run logs
+storybook:
+	npm run storybook
