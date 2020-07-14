@@ -1,19 +1,30 @@
+import React from "react";
 import App from "../components/App";
-import { client } from "../plugins/contentful";
+import { entriesPosts } from "../plugins/contentful";
+const promise = entriesPosts();
 
 export default function About() {
-  let entries;
-  async function fetchEntries() {
-    entries = await client.getEntries();
-    console.log(entries);
-    if (entries.items) return entries.items;
-    console.log(`Error getting Entries for ${contentType.name}.`);
-  }
+  // const [entries, setEntries] = React.useState([]);
+
+  // async function fetchEntries() {
+  // const data = await client.getEntries();
+  // const items = data.items;
+  // setEntries(items);
+  // console.log(data.items);
+  // }
+
+  const [posts, setPosts] = React.useState(null);
+  React.useEffect(() => {
+    promise.then((blogPosts) => {
+      setPosts(blogPosts);
+    });
+  }, []);
 
   return (
     <App>
-      {entries}
-      <button onClick={fetchEntries}>awe</button>
+      {/* {entries} */}
+      {JSON.stringify(posts)}
+      {/* <button onClick={fetchEntries}>awe</button> */}
       <p>About Page</p>
     </App>
   );

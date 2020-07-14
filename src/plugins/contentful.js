@@ -1,3 +1,19 @@
-import { contentfulConfig } from "../lib/config"
+import {
+  contentfulConfig
+} from "../lib/config"
 
-export const client = require('contentful').createClient(contentfulConfig)
+const client = require('contentful').createClient(contentfulConfig)
+
+const entriesPosts = () => client.getEntries().then(response => response.items)
+
+// const getSinglePost = slug =>
+//   client
+//   .getEntries({
+//     'fields.slug': slug,
+//     content_type: 'blogPost'
+//   })
+//   .then(response => response.items)
+
+export {
+  entriesPosts,
+}
