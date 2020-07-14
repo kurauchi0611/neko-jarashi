@@ -4,15 +4,6 @@ import { entriesPosts } from "../plugins/contentful";
 const promise = entriesPosts();
 
 export default function About() {
-  // const [entries, setEntries] = React.useState([]);
-
-  // async function fetchEntries() {
-  // const data = await client.getEntries();
-  // const items = data.items;
-  // setEntries(items);
-  // console.log(data.items);
-  // }
-
   const [posts, setPosts] = React.useState(null);
   React.useEffect(() => {
     promise.then((blogPosts) => {
