@@ -1,4 +1,7 @@
 import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import { useRouter } from "next/router";
+import { auth } from "../../plugins/firebase";
 import IconButton from "@material-ui/core/IconButton";
 import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -13,9 +16,8 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import { makeStyles } from "@material-ui/core/styles";
-import { useRouter } from "next/router";
-import { auth } from "../../plugins/firebase";
+import Snackbar from "@material-ui/core/Snackbar";
+import CloseIcon from "@material-ui/icons/Close";
 
 const useStyles = makeStyles({
   root: {
@@ -59,6 +61,7 @@ export default function AdminLogin() {
     showPassword: false,
   });
   const [loading, setLoading] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
@@ -75,11 +78,25 @@ export default function AdminLogin() {
   const loginCheck = () => {
     setLoading(true);
     console.log(values.email);
-    auth.signInWithEmailAndPassword(values.email, values.password).then((e) => {
-      // console.log(e.user.uid);
-      setLoading(false);
-      router.push(`/admin/${e.user.uid}`);
-    });
+    auth
+      .signInWithEmailAndPassword(values.email, values.password)
+      .then((e) => {
+        router.push(`/admin/${e.user.uid}`);
+        // console.log(e.user.uid);
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+        setOpen(true);
+      });
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
   };
 
   return (
@@ -140,6 +157,32 @@ export default function AdminLogin() {
           </div>
         </CardActions>
       </Card>
+
+      <Snackbar
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        message="ログインに失敗しました。"
+        action={
+          <React.Fragment>
+            <Button color="secondary" size="small" onClick={handleClose}>
+              Close
+            </Button>
+            <IconButton
+              size="small"
+              aria-label="close"
+              color="inherit"
+              onClick={handleClose}
+            >
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </React.Fragment>
+        }
+      />
     </div>
   );
 }
