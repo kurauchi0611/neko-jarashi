@@ -14,6 +14,7 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
+import { useRouter } from "next/router";
 import { auth } from "../../plugins/firebase";
 
 const useStyles = makeStyles({
@@ -50,6 +51,8 @@ const useStyles = makeStyles({
 
 export default function AdminLogin() {
   const classes = useStyles();
+  const router = useRouter();
+
   const [values, setValues] = React.useState({
     email: "",
     password: "",
@@ -71,13 +74,12 @@ export default function AdminLogin() {
 
   const loginCheck = () => {
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
     console.log(values.email);
-    // auth.signInWithEmailAndPassword(values.email, values.password).then((e) => {
-    //   console.log(e);
-    // });
+    auth.signInWithEmailAndPassword(values.email, values.password).then((e) => {
+      // console.log(e.user.uid);
+      setLoading(false);
+      router.push(`/admin/${e.user.uid}`);
+    });
   };
 
   return (
