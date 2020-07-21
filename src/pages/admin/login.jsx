@@ -12,9 +12,11 @@ import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
+import { auth } from "../../plugins/firebase";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles({
   root: {
     width: "100vw",
     height: "100vh",
@@ -24,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
   },
   card: {
-    width: 350,
+    width: "350px",
     margin: "0 auto",
   },
   title: {
@@ -34,16 +36,26 @@ const useStyles = makeStyles((theme) => ({
   margin: {
     marginBottom: "15px",
   },
-}));
+  buttonProgress: {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    marginTop: -12,
+    marginLeft: -12,
+  },
+  wrapper: {
+    position: "relative",
+  },
+});
 
 export default function AdminLogin() {
   const classes = useStyles();
-
   const [values, setValues] = React.useState({
     email: "",
     password: "",
     showPassword: false,
   });
+  const [loading, setLoading] = React.useState(false);
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
@@ -55,6 +67,17 @@ export default function AdminLogin() {
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
+  };
+
+  const loginCheck = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+    console.log(values.email);
+    // auth.signInWithEmailAndPassword(values.email, values.password).then((e) => {
+    //   console.log(e);
+    // });
   };
 
   return (
@@ -105,7 +128,14 @@ export default function AdminLogin() {
         </CardContent>
 
         <CardActions>
-          <Button variant="outlined">ログイン</Button>
+          <div className={classes.wrapper}>
+            <Button variant="outlined" onClick={loginCheck} disabled={loading}>
+              ログイン
+            </Button>
+            {loading && (
+              <CircularProgress size={24} className={classes.buttonProgress} />
+            )}
+          </div>
         </CardActions>
       </Card>
     </div>
