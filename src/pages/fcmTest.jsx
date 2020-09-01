@@ -4,6 +4,17 @@ import { messaging } from "../plugins/firebase";
 import { fcmServerKey } from "../lib/config";
 
 export default function About() {
+  // if (typeof navigator !== "undefined") {
+  //   if ("serviceWorker" in navigator) {
+  //     navigator.serviceWorker
+  //       .register("./firebase-messaging-sw.js")
+  //       .then(function (registration) {
+  //         console.log("Service Worker Registered");
+  //         messaging.useServiceWorker(registration);
+  //       });
+  //   }
+  // }
+
   let token = "";
   if (typeof Notification !== "undefined") {
     Notification.requestPermission().then((permission) => {
@@ -35,12 +46,10 @@ export default function About() {
     const url = "https://fcm.googleapis.com/fcm/send";
     const payload = {
       to: token,
-      data: {
-        foo: "bar",
-      },
       notification: {
-        title: "notification title",
-        body: "notification body",
+        title: "FCMテスト",
+        body: "FCMテストです。表示されれば成功です。",
+        url: "/",
       },
     };
     const opts = {
