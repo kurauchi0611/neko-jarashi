@@ -49,6 +49,14 @@ function App({ children }, props) {
       flexGrow: 1,
       padding: theme.spacing(3),
     },
+    notice:{
+      color:"#000",
+      textDecoration:"none",
+      "&link":{
+        textDecoration:"none",
+        color:"000"
+      }
+    }
   }));
 
   const { window } = props;
@@ -76,14 +84,32 @@ function App({ children }, props) {
             <ListItemText primary="トップページ" />
           </ListItem>
         </Link>
-        <Link href={`/admin/${userId}/test`}>
+        <Link href={`/admin/${userId}/myclassMemberList`}>
           <ListItem button>
             {/* <ListItemIcon>
               <ShoppingCartIcon />
             </ListItemIcon> */}
-            <ListItemText primary="商品ページ" />
+            <ListItemText primary="クラス名簿" />
           </ListItem>
         </Link>
+        <Link href={`/admin/${userId}/mySubjects`}>
+          <ListItem button>
+            {/* <ListItemIcon>
+              <ShoppingCartIcon />
+            </ListItemIcon> */}
+            <ListItemText primary="担当科目" />
+          </ListItem>
+        </Link>
+        {/* <Link href={`/admin/${userId}/test`}> */}
+        <a href="https://app.contentful.com/" className={classes.notice}>
+          <ListItem button>
+            {/* <ListItemIcon>
+              <ShoppingCartIcon />
+            </ListItemIcon> */}
+            <ListItemText primary="お知らせ作成" />
+          </ListItem>
+        </a>
+        {/* </Link> */}
       </List>
     </div>
   );

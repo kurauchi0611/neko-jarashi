@@ -5,8 +5,8 @@ import App from "../../../components/Admin/App";
 export default function Home() {
   return (
     <App>
-      <p>Index Page</p>
-      <button>asdasd</button>
+      <h2>お知らせ</h2>
+      
     </App>
   );
 }
