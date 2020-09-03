@@ -49,14 +49,14 @@ function App({ children }, props) {
       flexGrow: 1,
       padding: theme.spacing(3),
     },
-    notice:{
-      color:"#000",
-      textDecoration:"none",
-      "&link":{
-        textDecoration:"none",
-        color:"000"
-      }
-    }
+    notice: {
+      color: "#000",
+      textDecoration: "none",
+      "&link": {
+        textDecoration: "none",
+        color: "000",
+      },
+    },
   }));
 
   const { window } = props;
@@ -76,7 +76,7 @@ function App({ children }, props) {
       <div className={classes.toolbar} />
       <Divider />
       <List>
-        <Link href={`/admin/${userId}/`}>
+        <Link href="/admin/[userId]" as={`/admin/${userId}`}>
           <ListItem button>
             {/* <ListItemIcon>
               <HomeIcon />
@@ -84,7 +84,10 @@ function App({ children }, props) {
             <ListItemText primary="トップページ" />
           </ListItem>
         </Link>
-        <Link href={`/admin/${userId}/myclassMemberList`}>
+        <Link
+          href="/admin/[userId]/myclassMemberList"
+          as={`/admin/${userId}/myclassMemberList`}
+        >
           <ListItem button>
             {/* <ListItemIcon>
               <ShoppingCartIcon />
@@ -92,7 +95,10 @@ function App({ children }, props) {
             <ListItemText primary="クラス名簿" />
           </ListItem>
         </Link>
-        <Link href={`/admin/${userId}/mySubjects`}>
+        <Link
+          href="/admin/[userId]/mySubjects"
+          as={`/admin/${userId}/mySubjects`}
+        >
           <ListItem button>
             {/* <ListItemIcon>
               <ShoppingCartIcon />
@@ -100,16 +106,17 @@ function App({ children }, props) {
             <ListItemText primary="担当科目" />
           </ListItem>
         </Link>
-        {/* <Link href={`/admin/${userId}/test`}> */}
-        <a href="https://app.contentful.com/" className={classes.notice}>
+        <Link
+          href="/admin/[userId]/notification"
+          as={`/admin/${userId}/notification`}
+        >
           <ListItem button>
             {/* <ListItemIcon>
               <ShoppingCartIcon />
             </ListItemIcon> */}
             <ListItemText primary="お知らせ作成" />
           </ListItem>
-        </a>
-        {/* </Link> */}
+        </Link>
       </List>
     </div>
   );

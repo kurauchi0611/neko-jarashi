@@ -7,3 +7,5 @@ node_modules/
 .firebase/
 
 lib
+
+.DS_store
