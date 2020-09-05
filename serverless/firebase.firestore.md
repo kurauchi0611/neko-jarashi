@@ -24,15 +24,23 @@
 - subjects
 
   - subNum: string
-    - students
+    - students: subCole
       - grade: number
       - attendance: number
       - numberOfTimes: number
+      - createdAt: timestamp
+      - updatedAt: timestamp
+    - name: string
+    - teaher:
 
 - notifications
 
   - notificationId: string
-    - name: string
+    - title: string
     - body: string
-    - time: string
     - url: string
+    - teacher: string
+    - uid
+    - isPost: boolean
+    - createdAt: timestamp
+    - updatedAt: timestamp

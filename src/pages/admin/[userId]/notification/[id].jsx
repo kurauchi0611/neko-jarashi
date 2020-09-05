@@ -1,10 +1,10 @@
 import { makeStyles } from "@material-ui/core/styles";
 import React from "react";
-// import ReactMarkdown from "react-markdown";
-// import { CodeBlock } from "./codeBlock";
-import ReactMde, { commands } from "react-mde";
+import ReactMde from "react-mde";
 import * as Showdown from "showdown";
-import App from "../../../components/Admin/App";
+import App from "../../../../components/Admin/App";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
 
 const converter = new Showdown.Converter({
   tables: true,
@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
   wrap: {
     display: "flex",
     justifyContent: "space-between",
-    height: "100%",
+    // height: "100%",
   },
   inner: {
     width: "100%",
@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: theme.spacing(1),
     paddingRight: theme.spacing(1),
   },
-  editer: {
+  editor: {
     height: "100%",
     display: "flex",
     flexFlow: "column",
@@ -70,22 +70,44 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     paddingLeft: "18px",
   },
+  siteUrl: {
+    marginTop: "10px",
+    width: "100%",
+  },
+  title: {
+    width: "100%",
+    marginBottom: "30px",
+  },
+  button: {
+    marginTop: "30px",
+  },
+  buttonMargin: {
+    marginLeft: "15px",
+  },
 }));
 
 export default function AlignItemsList() {
   const classes = useStyles();
-  const [text, setText] = React.useState("**Hello world!!!**");
+  const [md, setMd] = React.useState("");
+  const [title, setTitle] = React.useState("");
   const [selectedTab, setSelectedTab] = React.useState("write");
 
   return (
     <App>
-      {text}
+      <TextField
+        className={classes.title}
+        id="standard-basic"
+        label="タイトル"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+      />
+
       <div className={classes.wrap}>
         <div className={classes.inner}>
           <ReactMde
-            className={classes.editer}
-            value={text}
-            onChange={setText}
+            className={classes.editor}
+            value={md}
+            onChange={setMd}
             selectedTab={selectedTab}
             onTabChange={setSelectedTab}
             generateMarkdownPreview={(markdown) =>
@@ -93,6 +115,19 @@ export default function AlignItemsList() {
             }
           />
         </div>
+      </div>
+
+      <TextField
+        className={classes.siteUrl}
+        id="standard-basic"
+        label="サイトURL"
+      />
+
+      <div className={classes.button}>
+        <Button variant="contained">保存</Button>
+        <Button className={classes.buttonMargin} variant="contained">
+          投稿
+        </Button>
       </div>
     </App>
   );
