@@ -1,5 +1,7 @@
-import { makeStyles } from "@material-ui/core/styles";
 import React from "react";
+import { useRouter } from "next/router";
+import { makeStyles } from "@material-ui/core/styles";
+import { db, FieldValue } from "../../../../plugins/firebase";
 import ReactMde from "react-mde";
 import * as Showdown from "showdown";
 import App from "../../../../components/Admin/App";
@@ -90,7 +92,34 @@ export default function AlignItemsList() {
   const classes = useStyles();
   const [md, setMd] = React.useState("");
   const [title, setTitle] = React.useState("");
+  const [url, setUrl] = React.useState("");
   const [selectedTab, setSelectedTab] = React.useState("write");
+
+  const router = useRouter();
+  const userId = router.query.userId;
+  const uid = router.query.id;
+
+  const sendFirestore = async (isPost) => {
+    const notification = {
+      title,
+      body: md,
+      url,
+      teacher: "aaaa",
+      uid,
+      isPost,
+      createdAt: FieldValue.serverTimestamp(),
+      updatedAt: FieldValue.serverTimestamp(),
+    };
+    await db.collection("notifications").add(notification);
+  };
+
+  const sendNotification = async () => {
+    sendFirestore(true);
+  };
+
+  const saveNotification = async () => {
+    sendFirestore(false);
+  };
 
   return (
     <App>
@@ -121,11 +150,19 @@ export default function AlignItemsList() {
         className={classes.siteUrl}
         id="standard-basic"
         label="サイトURL"
+        value={url}
+        onChange={(e) => setUrl(e.target.value)}
       />
 
       <div className={classes.button}>
-        <Button variant="contained">保存</Button>
-        <Button className={classes.buttonMargin} variant="contained">
+        <Button variant="contained" onClick={saveNotification}>
+          保存
+        </Button>
+        <Button
+          onClick={sendNotification}
+          className={classes.buttonMargin}
+          variant="contained"
+        >
           投稿
         </Button>
       </div>

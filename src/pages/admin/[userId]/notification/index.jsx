@@ -1,8 +1,9 @@
 import React from "react";
-import { uuid } from "uuidv4";
+import { v4 as uuidv4 } from "uuid";
 import { makeStyles } from "@material-ui/core/styles";
 import { useRouter } from "next/router";
 import { format } from "date-fns";
+import { db } from "../../../../plugins/firebase";
 import ja from "date-fns/locale/ja";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
@@ -34,88 +35,107 @@ const useStyles = makeStyles((theme) => ({
 export default function ImgMediaCard() {
   const classes = useStyles();
 
-  const datas = [
-    {
-      title: "タイトル1",
-      body: "ボディ1",
-      isPost: false,
-      uid: "1",
-      updatedAt: "",
-    },
-    {
-      title: "タイトル2",
-      body: "ボディ2",
-      isPost: true,
-      uid: "2",
-    },
-    {
-      title: "タイトル2",
-      body: "ボディ2",
-      isPost: true,
-      uid: "3",
-    },
-  ];
-
   const router = useRouter();
   const userId = router.query.userId;
-  const createdUuid = uuid().replace(/-/g, "").slice(0, -20);
+  const createdUuid = uuidv4().replace(/-/g, "").slice(0, -20);
   const handleDelete = () => {};
 
   const handleClick = () => {};
 
+  const init = [
+    {
+      title: "",
+      isPost: "",
+      uid: "",
+    },
+    {
+      title: "",
+      isPost: "",
+      uid: "",
+    },
+  ];
+
+  const [notifications, setNotifications] = React.useState([]);
+
+  React.useEffect(() => {
+    const notificationsData = [];
+    db.collection("notifications")
+      .get()
+      .then((snapShot) => {
+        snapShot.forEach((doc) => {
+          const data = doc.data();
+
+          const list = {
+            title: data.title,
+            isPost: data.isPost,
+            uid: data.uid,
+            updatedAt: format(
+              data.updatedAt.toDate(),
+              "yo年LLLdo(EEEEE) Ho:mo",
+              {
+                locale: ja,
+              }
+            ),
+          };
+
+          notificationsData.push(list);
+          console.log(notificationsData);
+        });
+        setNotifications(notificationsData);
+      });
+  }, []);
+
   return (
     <App>
       <Grid container spacing={3}>
-        {datas.map((data) => {
-          return (
-            <Grid item xs={6}>
-              <Card className={classes.root}>
-                <Link
-                  href="/admin/[userId]/notification/[id]"
-                  as={`/admin/${userId}/notification/${data.uid}`}
-                >
-                  <CardActionArea>
-                    <CardContent className={classes.paddingNone}>
-                      {data.isPost ? (
-                        <Chip
-                          color="primary"
-                          label="送信済"
-                          onClick={handleClick}
-                          onDelete={handleDelete}
-                          deleteIcon={<DoneIcon />}
-                        />
-                      ) : (
-                        <Chip
-                          color="secondary"
-                          label="未送信"
-                          onClick={handleClick}
-                          onDelete={handleDelete}
-                          deleteIcon={<ErrorOutlineIcon />}
-                        />
-                      )}
-                    </CardContent>
+        {notifications.length !== 0 &&
+          notifications.map((notification) => {
+            return (
+              <Grid item xs={6} key={notification.uid}>
+                <Card className={classes.root}>
+                  <Link
+                    href="/admin/[userId]/notification/[id]"
+                    as={`/admin/${userId}/notification/${notification.uid}`}
+                  >
+                    <CardActionArea>
+                      <CardContent className={classes.paddingNone}>
+                        {notification.isPost ? (
+                          <Chip
+                            color="primary"
+                            label="送信済"
+                            onClick={handleClick}
+                            onDelete={handleDelete}
+                            deleteIcon={<DoneIcon />}
+                          />
+                        ) : (
+                          <Chip
+                            color="secondary"
+                            label="未送信"
+                            onClick={handleClick}
+                            onDelete={handleDelete}
+                            deleteIcon={<ErrorOutlineIcon />}
+                          />
+                        )}
+                      </CardContent>
 
-                    <CardContent>
-                      <Typography gutterBottom variant="h5" component="h2">
-                        {data.title}
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        color="textSecondary"
-                        component="p"
-                      >
-                        更新日:{" "}
-                        {format(new Date(), "yo年LLLdo(EEEEE) Ho:mo", {
-                          locale: ja,
-                        })}
-                      </Typography>
-                    </CardContent>
-                  </CardActionArea>
-                </Link>
-              </Card>
-            </Grid>
-          );
-        })}
+                      <CardContent>
+                        <Typography gutterBottom variant="h5" component="h2">
+                          {notification.title}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          color="textSecondary"
+                          component="p"
+                        >
+                          更新日: {notification.updatedAt}
+                        </Typography>
+                      </CardContent>
+                    </CardActionArea>
+                  </Link>
+                </Card>
+              </Grid>
+            );
+          })}
       </Grid>
 
       <Link
