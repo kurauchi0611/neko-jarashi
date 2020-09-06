@@ -42,27 +42,14 @@ export default function ImgMediaCard() {
 
   const handleClick = () => {};
 
-  const init = [
-    {
-      title: "",
-      isPost: "",
-      uid: "",
-    },
-    {
-      title: "",
-      isPost: "",
-      uid: "",
-    },
-  ];
-
   const [notifications, setNotifications] = React.useState([]);
 
   React.useEffect(() => {
     const notificationsData = [];
     async function fetchNotifications() {
-      const fetch = await db.collection("notifications").get();
+      const notificationsDb = await db.collection("notifications").get();
 
-      fetch.forEach((doc) => {
+      notificationsDb.forEach((doc) => {
         const data = doc.data();
 
         const list = {
@@ -75,7 +62,7 @@ export default function ImgMediaCard() {
         };
 
         notificationsData.push(list);
-        console.log(notificationsData);
+
       });
 
       setNotifications(notificationsData);

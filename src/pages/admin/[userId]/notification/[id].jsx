@@ -94,23 +94,59 @@ export default function AlignItemsList() {
   const [title, setTitle] = React.useState("");
   const [url, setUrl] = React.useState("");
   const [selectedTab, setSelectedTab] = React.useState("write");
+  const [isFireStore, setIsFireStore] = React.useState(false);
+  const [uuid, setUuid] = React.useState("");
 
   const router = useRouter();
   const userId = router.query.userId;
   const uid = router.query.id;
 
+  React.useEffect(() => {
+    async function fetchNotification() {
+      const notificationDb = await db
+        .collection("notifications")
+        .where("uid", "==", uid)
+        .get();
+
+      if (notificationDb.empty) return;
+      setIsFireStore(true);
+
+      notificationDb.forEach((doc) => {
+        setUuid(doc.id);
+        const notificationData = doc.data();
+
+        setTitle(notificationData.title);
+        setMd(notificationData.body);
+        setUrl(notificationData.url);
+      });
+    }
+
+    fetchNotification();
+  }, []);
+
   const sendFirestore = async (isPost) => {
-    const notification = {
-      title,
-      body: md,
-      url,
-      teacher: "aaaa",
-      uid,
-      isPost,
-      createdAt: FieldValue.serverTimestamp(),
-      updatedAt: FieldValue.serverTimestamp(),
-    };
-    await db.collection("notifications").add(notification);
+    if (isFireStore) {
+      const notification = {
+        title,
+        body: md,
+        url,
+        isPost,
+        updatedAt: FieldValue.serverTimestamp(),
+      };
+      await db.collection("notifications").doc(uuid).update(notification);
+    } else {
+      const notification = {
+        title,
+        body: md,
+        url,
+        teacher: "aaaa",
+        uid,
+        isPost,
+        createdAt: FieldValue.serverTimestamp(),
+        updatedAt: FieldValue.serverTimestamp(),
+      };
+      await db.collection("notifications").add(notification);
+    }
   };
 
   const sendNotification = async () => {
@@ -125,7 +161,6 @@ export default function AlignItemsList() {
     <App>
       <TextField
         className={classes.title}
-        id="standard-basic"
         label="タイトル"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
@@ -148,7 +183,6 @@ export default function AlignItemsList() {
 
       <TextField
         className={classes.siteUrl}
-        id="standard-basic"
         label="サイトURL"
         value={url}
         onChange={(e) => setUrl(e.target.value)}
