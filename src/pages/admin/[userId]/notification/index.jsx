@@ -59,30 +59,29 @@ export default function ImgMediaCard() {
 
   React.useEffect(() => {
     const notificationsData = [];
-    db.collection("notifications")
-      .get()
-      .then((snapShot) => {
-        snapShot.forEach((doc) => {
-          const data = doc.data();
+    async function fetchNotifications() {
+      const fetch = await db.collection("notifications").get();
 
-          const list = {
-            title: data.title,
-            isPost: data.isPost,
-            uid: data.uid,
-            updatedAt: format(
-              data.updatedAt.toDate(),
-              "yo年LLLdo(EEEEE) Ho:mo",
-              {
-                locale: ja,
-              }
-            ),
-          };
+      fetch.forEach((doc) => {
+        const data = doc.data();
 
-          notificationsData.push(list);
-          console.log(notificationsData);
-        });
-        setNotifications(notificationsData);
+        const list = {
+          title: data.title,
+          isPost: data.isPost,
+          uid: data.uid,
+          updatedAt: format(data.updatedAt.toDate(), "yo年LLLdo(EEEEE) Ho:mo", {
+            locale: ja,
+          }),
+        };
+
+        notificationsData.push(list);
+        console.log(notificationsData);
       });
+
+      setNotifications(notificationsData);
+    }
+
+    fetchNotifications();
   }, []);
 
   return (
