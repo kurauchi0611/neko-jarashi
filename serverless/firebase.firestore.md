@@ -40,6 +40,7 @@
     - body: string
     - url: string
     - teacher: string
+    - to: string
     - uid
     - isPost: boolean
     - createdAt: timestamp

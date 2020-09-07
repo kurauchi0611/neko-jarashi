@@ -7,6 +7,11 @@ import * as Showdown from "showdown";
 import App from "../../../../components/Admin/App";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import Modal from "@material-ui/core/Modal";
+import Backdrop from "@material-ui/core/Backdrop";
+import Fade from "@material-ui/core/Fade";
+import ReactMarkdown from "react-markdown/with-html";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const converter = new Showdown.Converter({
   tables: true,
@@ -86,6 +91,35 @@ const useStyles = makeStyles((theme) => ({
   buttonMargin: {
     marginLeft: "15px",
   },
+  modal: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "600px",
+    margin: "0 auto",
+  },
+  paper: {
+    backgroundColor: theme.palette.background.paper,
+    border: "2px solid #000",
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+    overflow: "scroll",
+    height: "500px",
+  },
+  wrapper: {
+    position: "relative",
+    marginLeft: theme.spacing(2),
+  },
+  buttonProgress: {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    marginTop: -12,
+    marginLeft: -12,
+  },
+  btnWrap: {
+    display: "flex",
+  },
 }));
 
 export default function AlignItemsList() {
@@ -96,6 +130,8 @@ export default function AlignItemsList() {
   const [selectedTab, setSelectedTab] = React.useState("write");
   const [isFireStore, setIsFireStore] = React.useState(false);
   const [uuid, setUuid] = React.useState("");
+  const [open, setOpen] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
 
   const router = useRouter();
   const userId = router.query.userId;
@@ -105,7 +141,7 @@ export default function AlignItemsList() {
     async function fetchNotification() {
       const notificationDb = await db
         .collection("notifications")
-        .where("uid", "==", uid)
+        .where("uid", "==", uid ? uid : "")
         .get();
 
       if (notificationDb.empty) return;
@@ -124,7 +160,16 @@ export default function AlignItemsList() {
     fetchNotification();
   }, []);
 
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const sendFirestore = async (isPost) => {
+    setLoading(true);
     if (isFireStore) {
       const notification = {
         title,
@@ -146,6 +191,8 @@ export default function AlignItemsList() {
         updatedAt: FieldValue.serverTimestamp(),
       };
       await db.collection("notifications").add(notification);
+      setLoading(false);
+      setOpen(false);
     }
   };
 
@@ -189,17 +236,66 @@ export default function AlignItemsList() {
       />
 
       <div className={classes.button}>
-        <Button variant="contained" onClick={saveNotification}>
+        <Button
+          variant="contained"
+          onClick={saveNotification}
+          disabled={!title}
+        >
           保存
         </Button>
         <Button
-          onClick={sendNotification}
+          onClick={handleOpen}
+          disabled={!title || !md}
+          // onClick={sendNotification}
           className={classes.buttonMargin}
           variant="contained"
         >
-          投稿
+          確認
         </Button>
       </div>
+
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={open}
+        onClose={handleClose}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={open}>
+          <div className={classes.paper}>
+            <h2 id="transition-modal-title">{title}</h2>
+            <ReactMarkdown source={md} escapeHtml={false} />
+
+            <div className={classes.btnWrap}>
+              <Button onClick={handleClose} variant="contained">
+                閉じる
+              </Button>
+              <div className={classes.wrapper}>
+                <Button
+                  onClick={sendNotification}
+                  disabled={loading}
+                  variant="contained"
+                  color="primary"
+                >
+                  投稿
+                </Button>
+
+                {loading && (
+                  <CircularProgress
+                    size={24}
+                    className={classes.buttonProgress}
+                  />
+                )}
+              </div>
+            </div>
+          </div>
+        </Fade>
+      </Modal>
     </App>
   );
 }

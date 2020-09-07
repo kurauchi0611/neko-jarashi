@@ -47,7 +47,10 @@ export default function ImgMediaCard() {
   React.useEffect(() => {
     const notificationsData = [];
     async function fetchNotifications() {
-      const notificationsDb = await db.collection("notifications").get();
+      const notificationsDb = await db
+        .collection("notifications")
+        .orderBy("updatedAt", "desc")
+        .get();
 
       notificationsDb.forEach((doc) => {
         const data = doc.data();
@@ -56,13 +59,12 @@ export default function ImgMediaCard() {
           title: data.title,
           isPost: data.isPost,
           uid: data.uid,
-          updatedAt: format(data.updatedAt.toDate(), "yo年LLLdo(EEEEE) Ho:mo", {
+          updatedAt: format(data.updatedAt.toDate(), "yo年LLLdo(EEEEE) Ho:mm", {
             locale: ja,
           }),
         };
 
         notificationsData.push(list);
-
       });
 
       setNotifications(notificationsData);
