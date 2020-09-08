@@ -22,24 +22,6 @@ export default function Home() {
   const classes = useStyles();
 
   return (
-    <MuiThemeProvider theme={theme}>
-      <App>
-        <React.Fragment>
-          <CssBaseline />
-          {/* ヘッダー */}
-          <div className={classes.root}>
-            <AppBar position="static" >
-              <Toolbar>
-                <header>
-                  <Avatar alt="Profile Picture" />
-                  <h1>名前</h1>
-                  <p>学籍番号</p>
-                </header>
-              </Toolbar>
-            </AppBar>
-          </div>
-        </React.Fragment>
-      </App>
-    </MuiThemeProvider>
+    <h1>unchi</h1>
   );
 }
