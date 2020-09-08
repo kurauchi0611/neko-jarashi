@@ -1,6 +1,6 @@
 import * as React from "react";
 import Link from "next/link";
-// import Link from '@material-ui/'
+// import Link from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles";
 import BottomNavigation from "@material-ui/core/BottomNavigation";
 import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
@@ -36,22 +36,30 @@ export default function Header() {
           icon={<AccountCircleOutlined />}
         />
       </Link>
-      <BottomNavigationAction
-        label="出欠確認"
-        icon={<InsertChartOutlinedOutlinedIcon />}
-        href="/#"
-      />
-      <BottomNavigationAction label="時間割" icon={<EventIcon />} href="/#" />
-      <BottomNavigationAction
-        label="お知らせ"
-        icon={<NotificationsOutlinedIcon />}
-        href="/notifications"
-      />
-      <BottomNavigationAction
-        label="場所"
-        icon={<RoomOutlinedIcon />}
-        href="/place"
-      />
+      <Link href="/#">
+        <BottomNavigationAction
+          label="出欠確認"
+          icon={<InsertChartOutlinedOutlinedIcon />}
+        />
+      </Link>
+
+      <Link href="/#">
+        <BottomNavigationAction label="時間割" icon={<EventIcon />} />
+      </Link>
+
+      <Link href="/notifications">
+        <BottomNavigationAction
+          label="お知らせ"
+          icon={<NotificationsOutlinedIcon />}
+        />
+      </Link>
+
+      <Link href="/place">
+        <BottomNavigationAction
+          label="場所"
+          icon={<RoomOutlinedIcon />}
+        />
+      </Link>
     </BottomNavigation>
   );
 }
