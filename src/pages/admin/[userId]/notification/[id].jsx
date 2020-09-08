@@ -127,6 +127,7 @@ export default function AlignItemsList() {
   const [md, setMd] = React.useState("");
   const [title, setTitle] = React.useState("");
   const [url, setUrl] = React.useState("");
+  const [teacher, setTeacher] = React.useState("");
   const [selectedTab, setSelectedTab] = React.useState("write");
   const [isFireStore, setIsFireStore] = React.useState(false);
   const [uuid, setUuid] = React.useState("");
@@ -143,6 +144,12 @@ export default function AlignItemsList() {
         .collection("notifications")
         .where("uid", "==", uid ? uid : "")
         .get();
+
+      const teacherData = await db
+        .collection("users")
+        .doc(String(userId))
+        .get();
+      setTeacher(teacherData.data().name);
 
       if (notificationDb.empty) return;
       setIsFireStore(true);
@@ -184,7 +191,7 @@ export default function AlignItemsList() {
         title,
         body: md,
         url,
-        teacher: "aaaa",
+        teacher: teacher,
         uid,
         isPost,
         createdAt: FieldValue.serverTimestamp(),

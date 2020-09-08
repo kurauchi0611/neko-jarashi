@@ -31,7 +31,7 @@
       - createdAt: timestamp
       - updatedAt: timestamp
     - name: string
-    - teaher:
+    - teacher: string
 
 - notifications
 
