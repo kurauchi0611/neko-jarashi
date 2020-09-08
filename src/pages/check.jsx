@@ -30,7 +30,7 @@ export default function Home() {
     <MuiThemeProvider theme={theme}>
       <div className={classes.Wrap}>
       <CssBaseline />
-      <h1>user</h1>
+      <h1>check</h1>
       </div>
     </MuiThemeProvider>
   );

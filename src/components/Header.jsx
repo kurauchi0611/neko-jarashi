@@ -12,6 +12,7 @@ import RoomOutlinedIcon from "@material-ui/icons/RoomOutlined";
 
 const useStyles = makeStyles({
   root: {
+    width: "375px",
     position: "fixed",
     bottom: 0,
   },
@@ -36,14 +37,15 @@ export default function Header() {
           icon={<AccountCircleOutlined />}
         />
       </Link>
-      <Link href="/#">
+      
+      <Link href="/check">
         <BottomNavigationAction
           label="出欠確認"
           icon={<InsertChartOutlinedOutlinedIcon />}
         />
       </Link>
 
-      <Link href="/#">
+      <Link href="/schedule">
         <BottomNavigationAction label="時間割" icon={<EventIcon />} />
       </Link>
 

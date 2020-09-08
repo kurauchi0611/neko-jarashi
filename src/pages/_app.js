@@ -1,15 +1,28 @@
 import { CssBaseline } from "@material-ui/core";
+// import { MuiThemeProvider } from '@material-ui/core/styles';
 import { ThemeProvider } from "@material-ui/styles";
-import { theme } from '../materialui/theme';
+import { makeStyles } from '@material-ui/core/styles';
+import { theme } from "../materialui/theme";
 import React from "react";
 import Header from "../components/Header";
 
+const useStyles = makeStyles((theme) => ({
+  Wrap: {
+    width: "375px",
+    hight: "812px",
+  },
+}));
+
 function MyApp({ Component, pageProps }) {
+  const classes = useStyles();
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Component {...pageProps} />
-      <Header />
+      <div className={classes.Wrap}>
+        <Component {...pageProps} />
+        <Header />
+      </div>
     </ThemeProvider>
   );
 }

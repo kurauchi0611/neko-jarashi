@@ -3,8 +3,8 @@ import React from "react";
 import { MuiThemeProvider } from "@material-ui/core/styles";
 import { theme } from "../materialui/theme";
 import { makeStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
@@ -48,6 +48,11 @@ const messages = [
 ];
 
 const useStyles = makeStyles((theme) => ({
+  Wrap: {
+    top: 20,
+    width: 375,
+    hight: 736,
+  },
   root: {
     flexGrow: 1,
   },
@@ -70,32 +75,34 @@ export default function Home() {
 
   return (
     <React.Fragment>
-      <CssBaseline />
-      {/* ヘッダー */}
-      <div className={classes.root}>
-        <AppBar position="static">
-          <Toolbar>
-            <IconButton color="inherit">
-              <NotificationsOutlinedIcon />
-            </IconButton>
-            <Typography variant="h6" className={classes.title}>
-              お知らせ
-            </Typography>
-          </Toolbar>
-        </AppBar>
+      <div className={classes.Wrap}>
+        <CssBaseline />
+        {/* ヘッダー */}
+        <div className={classes.root}>
+          <AppBar position="static">
+            <Toolbar>
+              <IconButton color="inherit">
+                <NotificationsOutlinedIcon />
+              </IconButton>
+              <Typography variant="h6" className={classes.title}>
+                お知らせ
+              </Typography>
+            </Toolbar>
+          </AppBar>
+        </div>
+        {/* メインエリア */}
+        <Paper square className={classes.paper}>
+          <List className={classes.list}>
+            {messages.map(({ primary, secondary }) => (
+              <React.Fragment>
+                <ListItem button>
+                  <ListItemText primary={primary} secondary={secondary} />
+                </ListItem>
+              </React.Fragment>
+            ))}
+          </List>
+        </Paper>
       </div>
-      {/* メインエリア */}
-      <Paper square className={classes.paper}>
-        <List className={classes.list}>
-          {messages.map(({ primary, secondary }) => (
-            <React.Fragment>
-              <ListItem button>
-                <ListItemText primary={primary} secondary={secondary} />
-              </ListItem>
-            </React.Fragment>
-          ))}
-        </List>
-      </Paper>
     </React.Fragment>
   );
 }
