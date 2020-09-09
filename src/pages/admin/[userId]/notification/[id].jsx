@@ -104,7 +104,7 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
     overflow: "scroll",
-    height: "500px",
+    maxHeight: "500px",
   },
   wrapper: {
     position: "relative",
@@ -197,6 +197,7 @@ export default function AlignItemsList() {
         createdAt: FieldValue.serverTimestamp(),
         updatedAt: FieldValue.serverTimestamp(),
       };
+
       await db.collection("notifications").add(notification);
       setLoading(false);
       setOpen(false);
