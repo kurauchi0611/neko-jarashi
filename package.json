@@ -13,19 +13,33 @@
     "serve": "npm run build && firebase emulators:start --only functions,hosting",
     "shell": "npm run build && firebase functions:shell",
     "deploy": "firebase deploy --only functions,hosting",
-    "logs": "firebase functions:log"
+    "logs": "firebase functions:log",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "dependencies": {
     "@material-ui/core": "^4.10.2",
     "@material-ui/icons": "^4.9.1",
-    "date-fns": "^2.14.0",
+    "contentful": "^7.14.5",
+    "date-fns": "^2.16.1",
+    "firebase": "^7.16.1",
     "firebase-admin": "^8.9.0",
     "firebase-functions": "^3.3.0",
     "next": "^9.3.4",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react-dom": "^16.13.1",
+    "react-markdown": "^4.3.1",
+    "react-mde": "^11.0.0",
+    "showdown": "^1.9.1",
+    "uuid": "^8.3.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.10.4",
+    "@storybook/addon-actions": "^5.3.19",
+    "@storybook/addon-links": "^5.3.19",
+    "@storybook/addons": "^5.3.19",
+    "@storybook/react": "^5.3.19",
+    "babel-loader": "^8.1.0",
     "firebase-functions-test": "^0.1.6",
     "firebase-tools": "^8.4.3"
   }

@@ -5,3 +5,7 @@ node_modules/
 
 # Firebase cache
 .firebase/
+
+lib
+
+.DS_store
