@@ -89,9 +89,6 @@ function App({ children }, props) {
           as={`/admin/${userId}/toDayStudents`}
         >
           <ListItem button>
-            {/* <ListItemIcon>
-              <HomeIcon />
-            </ListItemIcon> */}
             <ListItemText primary="出席確認" />
           </ListItem>
         </Link>
