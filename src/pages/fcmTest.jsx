@@ -14,7 +14,7 @@ export default function About() {
   //       });
   //   }
   // }
-
+  const [unchi, setUnchi] = React.useState("");
   let token = "";
   if (typeof Notification !== "undefined") {
     Notification.requestPermission().then((permission) => {
@@ -27,7 +27,9 @@ export default function About() {
             // トークン取得成功
             console.log("currentToken:");
             console.log(currentToken);
+
             token = currentToken;
+            setUnchi(token);
           } else {
             // トークン取得失敗
           }
@@ -69,7 +71,7 @@ export default function About() {
   return (
     <App>
       <p>fcm test Page</p>
-
+      {unchi}
       <button onClick={fcmTest}>テスト</button>
     </App>
   );
