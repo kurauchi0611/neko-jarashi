@@ -186,6 +186,8 @@ export default function AlignItemsList() {
         updatedAt: FieldValue.serverTimestamp(),
       };
       await db.collection("notifications").doc(uuid).update(notification);
+      setLoading(false);
+      setOpen(false);
     } else {
       const notification = {
         title,
